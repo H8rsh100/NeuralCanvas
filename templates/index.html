@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NeuralCanvas — AI-powered concept map generator using NLP, Machine Learning, and LLM integration for interactive learning.">
+    <title>NeuralCanvas — AI Concept Map Learning System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- ========== LEFT PANEL — INPUT ========== -->
+        <div class="left-panel">
+
+            <!-- Header / Logo -->
+            <div class="app-header">
+                <div class="app-logo">
+                    <div class="logo-icon">🧠</div>
+                    <h1>NeuralCanvas</h1>
+                </div>
+                <p class="app-subtitle">AI Concept Map Learning System</p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="tab-container">
+                <div class="tab-switcher">
+                    <button class="tab active" data-mode="topic" id="tab-topic">
+                        <span class="tab-icon">✨</span> Topic Mode
+                    </button>
+                    <button class="tab" data-mode="text" id="tab-text">
+                        <span class="tab-icon">📝</span> Text Mode
+                    </button>
+                </div>
+            </div>
+
+            <!-- Input Section -->
+            <div class="input-section">
+
+                <!-- Topic Mode Input -->
+                <div class="input-group active" id="topic-input">
+                    <label class="input-label" for="topic-field">Enter a topic name</label>
+                    <input
+                        type="text"
+                        id="topic-field"
+                        class="input-field"
+                        placeholder="e.g. Neural Networks, Photosynthesis, Machine Learning..."
+                        autocomplete="off"
+                    >
+                    <button class="generate-btn" id="generate-topic-btn">
+                        <span>🚀</span> Generate Concept Map
+                    </button>
+                </div>
+
+                <!-- Text Mode Input -->
+                <div class="input-group" id="text-input">
+                    <label class="input-label" for="text-field">Paste your notes or text</label>
+                    <textarea
+                        id="text-field"
+                        class="input-field"
+                        placeholder="Paste your study notes, lecture content, or any text you want to visualize as a concept map..."
+                    ></textarea>
+                    <button class="generate-btn" id="generate-text-btn">
+                        <span>🚀</span> Generate Concept Map
+                    </button>
+                </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div class="status-container">
+                <div class="status-message" id="status-message">
+                    <div class="spinner" id="status-spinner"></div>
+                    <span id="status-text">Processing...</span>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="legend-panel" id="legend-panel" style="display: none;">
+                <div class="legend-title">Legend</div>
+
+                <div class="legend-section">
+                    <div class="legend-section-title">Clusters</div>
+                    <div class="legend-items" id="cluster-legend"></div>
+                </div>
+
+                <div class="legend-section">
+                    <div class="legend-section-title">Categories</div>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <span class="legend-icon">📖</span> Definition
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-icon">⚙️</span> Process
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-icon">💡</span> Example
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-icon">🔬</span> Theory
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-icon">🚀</span> Application
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Button -->
+                <button class="export-btn" id="export-btn" disabled>
+                    <span>📥</span> Download as PNG
+                </button>
+            </div>
+        </div>
+
+        <!-- ========== RIGHT PANEL — GRAPH CANVAS ========== -->
+        <div class="right-panel">
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state">
+                <div class="empty-state-icon">🗺️</div>
+                <h2>Your concept map will appear here</h2>
+                <p>Enter a topic or paste your notes in the left panel to generate an interactive concept map.</p>
+            </div>
+
+            <!-- Cytoscape.js Canvas -->
+            <div id="cy"></div>
+
+            <!-- Node Info Tooltip -->
+            <div class="node-info" id="node-info">
+                <div class="node-info-header">
+                    <span class="node-info-title" id="info-title">Concept</span>
+                    <button class="node-info-close" id="info-close">&times;</button>
+                </div>
+                <div class="node-info-row">
+                    <span class="node-info-label">Category</span>
+                    <span class="node-info-badge" id="info-category">Definition</span>
+                </div>
+                <div class="node-info-row">
+                    <span class="node-info-label">Cluster</span>
+                    <span class="node-info-value" id="info-cluster">0</span>
+                </div>
+                <div class="node-info-row">
+                    <span class="node-info-label">Importance</span>
+                    <span class="node-info-value" id="info-score">0.0</span>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar" id="stats-bar">
+                <div class="stat-item">
+                    <span>Concepts:</span>
+                    <span class="stat-value" id="stat-nodes">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Relations:</span>
+                    <span class="stat-value" id="stat-edges">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Clusters:</span>
+                    <span class="stat-value" id="stat-clusters">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
