@@ -30,6 +30,6 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    print("\n🧠 NeuralCanvas is running!")
-    print("📍 Open http://127.0.0.1:5000 in your browser\n")
+    print("\n[*] NeuralCanvas is running!")
+    print("[>] Open http://127.0.0.1:5000 in your browser\n")
     app.run(debug=True, host='0.0.0.0', port=5000)
